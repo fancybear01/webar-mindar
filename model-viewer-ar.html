@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101828">
+    <title>WebAR — model-viewer</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="vendor/model-viewer.min.js?v=2"></script>
+  </head>
+  <body>
+    <main class="demo-page">
+      <a class="back" href="index.html">← К сценариям</a>
+      <p class="eyebrow">Задание 1</p>
+      <h1>Разместить объект в пространстве</h1>
+      <p class="lead">В 3D‑режиме модель можно вращать и масштабировать. Кнопка «Посмотреть у себя» запускает подходящий AR‑просмотрщик устройства.</p>
+      <model-viewer
+        src="assets/pyramid.gltf?v=2"
+        ios-src="assets/pyramid.usdz"
+        alt="Золотая 3D-пирамида"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        ar-scale="auto"
+        ar-placement="floor"
+        camera-controls
+        auto-rotate
+        shadow-intensity="1"
+        shadow-softness="0.8"
+        exposure="1"
+        environment-image="assets/studio.hdr"
+        poster="assets/poster.svg">
+        <button slot="ar-button" class="ar-button">Посмотреть у себя</button>
+        <div slot="poster" class="loading">Загрузка 3D‑модели…</div>
+      </model-viewer>
+      <section class="info"><h2>Поддерживаемые режимы</h2><p><code>webxr</code> — WebXR в совместимом браузере; <code>scene-viewer</code> — Android (Chrome + ARCore); <code>quick-look</code> — iOS Safari. Для Quick Look задан отдельный файл <code>pyramid.usdz</code>.</p></section>
+    </main>
+  </body>
+</html>

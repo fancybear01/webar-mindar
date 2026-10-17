@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Проверка камеры WebAR</title>
+    <style>
+      :root { font-family: system-ui, sans-serif; color-scheme: dark; }
+      body { max-width: 680px; margin: 0 auto; padding: 24px 16px; background: #101828; color: #fff; }
+      h1 { font-size: 1.5rem; }
+      pre { padding: 16px; background: #1d2939; border-radius: 12px; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
+      button { padding: 14px 20px; border: 0; border-radius: 12px; background: #86efac; color: #101828; font: inherit; font-weight: 700; }
+      button:disabled { opacity: .6; }
+      video { display: block; width: 100%; max-height: 45vh; margin-top: 16px; background: #000; transform: scaleX(-1); }
+      video[hidden] { display: none; }
+      a { color: #bfdbfe; }
+    </style>
+  </head>
+  <body>
+    <a href="mindar-face-tracking.html">Вернуться к заданию 3</a>
+    <h1>Проверка передней камеры</h1>
+    <p>Нажмите кнопку и разрешите камеру. Проверка работает прямо в браузере; видео никуда не отправляется.</p>
+    <pre id="camera-report" role="status" aria-live="polite"></pre>
+    <button id="camera-test" type="button">Проверить камеру</button>
+    <video id="camera-preview" autoplay playsinline muted hidden></video>
+    <script>
+      const report = document.querySelector('#camera-report');
+      const button = document.querySelector('#camera-test');
+      const video = document.querySelector('#camera-preview');
+      const hasCameraAPI = Boolean(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+      let stream = null;
+
+      function showResult(result) {
+        report.textContent = [
+          `Адрес: ${location.origin}`,
+          `Защищённый контекст: ${window.isSecureContext ? 'ДА' : 'НЕТ'}`,
+          `API камеры: ${hasCameraAPI ? 'ЕСТЬ' : 'ОТСУТСТВУЕТ'}`,
+          `Результат: ${result}`,
+          `Браузер: ${navigator.userAgent}`
+        ].join('\n');
+      }
+
+      showResult('Нажмите «Проверить камеру».');
+
+      button.addEventListener('click', async () => {
+        if (!hasCameraAPI) {
+          showResult(window.isSecureContext
+            ? 'Браузер не предоставляет API камеры даже в защищённом контексте.'
+            : 'Chrome не считает этот адрес защищённым. Исключение для HTTP фактически не применилось.');
+          return;
+        }
+        button.disabled = true;
+        showResult('Ожидается разрешение камеры…');
+        if (stream) stream.getTracks().forEach(track => track.stop());
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: { facingMode: 'user' }
+          });
+          video.srcObject = stream;
+          video.hidden = false;
+          await video.play();
+          showResult('Камера работает. Если задание 3 всё ещё не запускается, требуется проверить загрузку MindAR и модели лица.');
+        } catch (error) {
+          if (stream) stream.getTracks().forEach(track => track.stop());
+          stream = null;
+          video.srcObject = null;
+          video.hidden = true;
+          const hints = {
+            NotAllowedError: 'Проверьте разрешение камеры для сайта и разрешение камеры для Chrome в настройках Android.',
+            NotReadableError: 'Камера может быть занята другим приложением или вкладкой.',
+            NotFoundError: 'Браузер не нашёл доступную камеру.',
+            SecurityError: 'Использование камеры заблокировано настройками браузера.',
+            OverconstrainedError: 'Камера не поддерживает запрошенные параметры.'
+          };
+          showResult(`${error.name}: ${error.message}\n${hints[error.name] || 'Скопируйте название и текст ошибки.'}`);
+        } finally {
+          button.disabled = false;
+        }
+      });
+
+      window.addEventListener('pagehide', () => {
+        if (stream) stream.getTracks().forEach(track => track.stop());
+      });
+    </script>
+  </body>
+</html>

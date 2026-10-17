@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#101828">
+    <title>AR‑очки — MindAR Face Tracking</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="vendor/aframe-1.5.0.min.js"></script>
+    <script src="vendor/mindar-face-aframe-1.2.5.js"></script>
+    <script src="face-tracking.js" defer></script>
+  </head>
+  <body class="ar-page">
+    <a class="back floating" href="index.html">← К сценариям</a>
+    <p class="floating-title">Задание 3 · AR‑очки</p>
+    <p id="face-status" class="tracking-message" role="status" aria-live="polite">Разрешите камеру и посмотрите в неё</p>
+    <a-scene
+      mindar-face="autoStart: true; uiLoading: yes; uiError: yes"
+      embedded
+      color-space="sRGB"
+      renderer="colorManagement: true; physicallyCorrectLights: true"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false">
+      <a-camera active="false" position="0 0 0" look-controls="enabled: false"></a-camera>
+      <!-- Точка 168 расположена на переносице. Это опора для очков. -->
+      <a-entity id="nose-anchor" mindar-face-target="anchorIndex: 168"></a-entity>
+      <!-- Лёгкая симметричная 3D-модель без внешних текстур. -->
+      <a-entity id="glasses" smooth-face-follow="target: #nose-anchor; responseMs: 65" visible="false">
+        <a-entity position="0 0 0.055">
+          <a-torus position="-0.22 0 0" radius="0.18" radius-tubular="0.018" segments-radial="8" segments-tubular="40" material="color: #f5c451; metalness: 0.45; roughness: 0.35"></a-torus>
+          <a-torus position="0.22 0 0" radius="0.18" radius-tubular="0.018" segments-radial="8" segments-tubular="40" material="color: #f5c451; metalness: 0.45; roughness: 0.35"></a-torus>
+          <a-circle position="-0.22 0 -0.003" radius="0.16" material="color: #64b5f6; opacity: 0.30; transparent: true; depthWrite: false; side: double"></a-circle>
+          <a-circle position="0.22 0 -0.003" radius="0.16" material="color: #64b5f6; opacity: 0.30; transparent: true; depthWrite: false; side: double"></a-circle>
+          <a-box position="0 0.055 0" width="0.10" height="0.025" depth="0.035" material="color: #f5c451; metalness: 0.45; roughness: 0.35"></a-box>
+          <a-box position="-0.425 0 0" width="0.065" height="0.025" depth="0.035" material="color: #f5c451; metalness: 0.45; roughness: 0.35"></a-box>
+          <a-box position="0.425 0 0" width="0.065" height="0.025" depth="0.035" material="color: #f5c451; metalness: 0.45; roughness: 0.35"></a-box>
+        </a-entity>
+      </a-entity>
+      <a-light type="ambient" color="#ffffff" intensity="1.2"></a-light>
+      <a-light type="directional" color="#fff5da" intensity="0.8" position="1 2 2"></a-light>
+    </a-scene>
+  </body>
+</html>
