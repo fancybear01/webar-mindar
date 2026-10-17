@@ -36,7 +36,26 @@ AFRAME.registerComponent('smooth-face-follow', {
 document.addEventListener('DOMContentLoaded', () => {
   const scene = document.querySelector('a-scene');
   const status = document.querySelector('#face-status');
-  scene.addEventListener('arReady', () => { status.textContent = 'Наведите переднюю камеру на лицо'; });
+  const stage = document.querySelector('#face-stage');
+  let cameraReady = false;
+  let resizeFrame = null;
+  const resizeCamera = () => {
+    if (!cameraReady || resizeFrame !== null) return;
+    resizeFrame = requestAnimationFrame(() => {
+      resizeFrame = null;
+      // MindAR вычисляет размер видео по родителю a-scene. После изменения
+      // видимой области Chrome синхронно обновляем видео и WebGL-проекцию.
+      scene.systems['mindar-face-system']._resize();
+      scene.resize();
+    });
+  };
+  new ResizeObserver(resizeCamera).observe(stage);
+  window.visualViewport?.addEventListener('resize', resizeCamera);
+  scene.addEventListener('arReady', () => {
+    cameraReady = true;
+    status.textContent = 'Наведите переднюю камеру на лицо';
+    resizeCamera();
+  });
   scene.addEventListener('targetFound', () => { status.textContent = 'Лицо найдено — очки отслеживают движение'; });
   scene.addEventListener('targetLost', () => { status.textContent = 'Лицо потеряно — вернитесь в кадр'; });
   scene.addEventListener('arError', () => { status.textContent = 'Не удалось запустить камеру. Проверьте HTTPS и разрешение камеры.'; });

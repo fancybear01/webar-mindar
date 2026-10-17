@@ -5,18 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#101828">
     <title>Размещение объекта — Three.js и WebXR hit-test</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20261017-2">
   </head>
   <body class="hit-test-page">
-    <a class="back floating" href="index.html">← К сценариям</a>
-    <div class="xr-panel">
+    <div id="xr-overlay" class="xr-overlay">
+      <a class="back floating" href="index.html">← К сценариям</a>
+      <div class="xr-panel">
       <p class="eyebrow">Задание 4</p>
       <h1>Разместить куб в комнате</h1>
       <p id="xr-status" role="status" aria-live="polite">Проверяем поддержку WebXR…</p>
-      <button id="start-ar" type="button" disabled>Начать AR</button>
-      <button id="end-ar" type="button" hidden>Завершить AR</button>
-      <p class="xr-help">Наведите камеру на пол или стол. Когда появится кольцо, коснитесь экрана — куб останется на месте.</p>
+      <div class="xr-actions">
+        <button id="start-ar" type="button" disabled>Начать AR</button>
+        <button id="place-cube" type="button" hidden disabled>Разместить куб</button>
+        <button id="end-ar" type="button" hidden>Завершить AR</button>
+      </div>
+      <p class="xr-help">В AR медленно двигайте телефон, направив его на пол или стол. Когда появятся зелёное кольцо и полупрозрачный куб, нажмите «Разместить куб» или коснитесь свободной области экрана.</p>
+      </div>
     </div>
-    <script type="module" src="threejs-hit-test.js"></script>
+    <script type="module" src="threejs-hit-test.js?v=20261017-2"></script>
   </body>
 </html>

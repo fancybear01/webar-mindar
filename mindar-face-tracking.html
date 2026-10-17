@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#101828">
     <title>AR‑очки — MindAR Face Tracking</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20261017-2">
     <script src="vendor/aframe-1.5.0.min.js"></script>
     <script src="vendor/mindar-face-aframe-1.2.5.js"></script>
-    <script src="face-tracking.js" defer></script>
+    <script src="face-tracking.js?v=20261017-2" defer></script>
   </head>
-  <body class="ar-page">
+  <body class="ar-page face-page">
     <a class="back floating" href="index.html">← К сценариям</a>
     <p class="floating-title">Задание 3 · AR‑очки</p>
     <p id="face-status" class="tracking-message" role="status" aria-live="polite">Разрешите камеру и посмотрите в неё</p>
+    <div id="face-stage">
     <a-scene
       mindar-face="autoStart: true; uiLoading: yes; uiError: yes"
       embedded
@@ -39,5 +40,6 @@
       <a-light type="ambient" color="#ffffff" intensity="1.2"></a-light>
       <a-light type="directional" color="#fff5da" intensity="0.8" position="1 2 2"></a-light>
     </a-scene>
+    </div>
   </body>
 </html>

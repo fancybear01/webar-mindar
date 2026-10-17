@@ -9,8 +9,16 @@ model-viewer { width:100%; height:min(68vh,620px); margin:28px 0; border-radius:
 @media(max-width:620px){.cards{grid-template-columns:1fr}.page,.demo-page{padding-top:32px}model-viewer{height:58vh}}
 .floating-title { position:fixed; z-index:3; top:48px; left:16px; margin:0; color:#fff; font-weight:700; text-shadow:0 1px 4px #000; }
 .ar-page a-scene { position:fixed; inset:0; width:100%; height:100%; }
+.face-page { position:fixed; inset:0; height:100vh; height:100dvh; }
+#face-stage { position:fixed; inset:0; width:100%; height:100vh; height:100dvh; overflow:hidden; isolation:isolate; }
+#face-stage a-scene { position:absolute; inset:auto; z-index:0; }
 .hit-test-page { min-height:100vh; overflow:hidden; background:#101828; }
 .hit-test-page canvas { position:fixed; inset:0; width:100%; height:100%; }
 .xr-panel { position:fixed; z-index:3; left:16px; right:16px; bottom:max(16px,env(safe-area-inset-bottom)); max-width:520px; margin:auto; padding:16px; border-radius:18px; background:#101828d9; color:#fff; }
 .xr-panel h1 { font-size:1.5rem; margin:6px 0; }.xr-panel p { margin:8px 0; line-height:1.4; }.xr-panel .xr-help { color:#cbd5e1; font-size:.9rem; }
 .xr-panel button { border:0; border-radius:999px; padding:12px 18px; background:#16a34a; color:#fff; font:inherit; font-weight:700; }.xr-panel button:disabled { opacity:.5; }.xr-panel button[hidden] { display:none; }
+.xr-overlay { position:fixed; inset:0; z-index:3; pointer-events:none; background:transparent; }
+.xr-overlay .xr-panel, .xr-overlay .back { pointer-events:auto; }
+.xr-panel .xr-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.xr-active { background:transparent; }
+.xr-active .xr-panel h1, .xr-active .xr-panel .eyebrow, .xr-active .xr-panel .xr-help { display:none; }
