@@ -19,11 +19,7 @@ export class SceneController {
     this.ui = new UIController();
     this.object = new ObjectManager(this.scene);
     this.lighting = new EnvironmentLighting(this.scene, this.renderer);
-    this.grid = new THREE.GridHelper(2, 20, 0x526c94, 0x263750);
-    this.grid.position.set(0, 0.035, -0.8);
-    this.scene.add(this.grid);
     this.placement = new XRPlacement(this.renderer, this.scene, this.object, this.ui, active => {
-      this.grid.visible = !active;
       if (!active) {
         this.camera.position.set(0, 0, 0);
         this.camera.quaternion.identity();
