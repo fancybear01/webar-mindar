@@ -1,0 +1,25 @@
+.controls-page { margin:0; height:100vh; height:100dvh; overflow:hidden; background:radial-gradient(ellipse at 50% 35%,#233654,#101828 70%); }
+.controls-page canvas { position:fixed; inset:0; width:100%; height:100%; }
+.controls-overlay { position:fixed; inset:0; z-index:3; pointer-events:none; background:transparent; }
+.controls-overlay a,.control-panel { pointer-events:auto; }
+.controls-heading { position:absolute; top:70px; left:20px; right:20px; text-align:center; }
+.controls-heading h1 { font-size:clamp(1.1rem,3.5vw,1.8rem); margin:8px 0; }
+#lighting-status { color:#cbd5e1; font-size:.85rem; }
+.control-panel { position:absolute; bottom:max(12px,env(safe-area-inset-bottom)); left:12px; right:12px; margin:auto; width:min(calc(100% - 24px),600px); max-height:48vh; max-height:48dvh; overflow:auto; padding:14px; border:1px solid #475569; border-radius:18px; background:#101828ed; box-shadow:0 10px 30px #0005; }
+#controls-status { margin:0 0 10px; font-size:.95rem; line-height:1.4; }
+.control-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.control-panel button { border:0; border-radius:10px; padding:10px 14px; background:#86efac; color:#101828; font:inherit; font-weight:650; touch-action:manipulation; }
+.control-panel button:disabled { opacity:.45; }
+.control-panel [hidden] { display:none; }
+.control-panel summary { cursor:pointer; padding:12px 0; font-weight:650; }
+.control-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.control-grid label { display:grid; gap:6px; font-size:.9rem; color:#e2e8f0; }
+.control-grid select { width:100%; padding:8px; border-radius:8px; background:#25344b; color:white; font:inherit; border:1px solid #64748b; }
+.control-grid input[type=color] { width:100%; height:38px; background:transparent; border:1px solid #64748b; border-radius:8px; }
+.control-grid input[type=range] { width:100%; margin:4px 0; accent-color:#86efac; }
+.rotation-controls { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:.9rem; }
+.rotation-controls div { display:flex; gap:5px; }.rotation-controls button { background:#334155; color:white; padding:8px; }
+.controls-help { margin:12px 0 0; color:#cbd5e1; font-size:.8rem; line-height:1.4; }
+.controls-page.ar-running { background:transparent; }.ar-running .controls-heading,.ar-running .controls-help { display:none; }
+.ar-running .control-panel { max-height:45vh; max-height:45dvh; }
+@media(max-height:500px){.controls-heading{top:18px;left:180px}.control-panel{max-height:46vh}.controls-help{display:none}.controls-heading h1{font-size:1rem}}
