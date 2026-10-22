@@ -1,0 +1,9 @@
+{
+  "unity": "6000.3.7f1",
+  "webxrExport": "0.25.0",
+  "compression": "Disabled",
+  "decompressionFallback": false,
+  "multithread": false,
+  "totalBytes": 16686409,
+  "mobileTest": "Pending real Android device"
+}
