@@ -67,3 +67,22 @@ cloudflared tunnel --url http://localhost:8080
 - Задание 4: после «Начать AR» появляется зелёное кольцо на полу или столе; касание размещает куб. При перемещении телефона куб остаётся на прежнем месте.
 
 Файлы A-Frame, MindAR, Three.js, MediaPipe WASM и модель лица сохранены локально. Камера и WebXR требуют HTTPS либо `localhost`. Настольная проверка подтверждает загрузку страницы и сообщения о совместимости, но не заменяет проверку AR на телефоне.
+
+## Задание 7: интерактивный Unity WebAR
+
+Исходники продолжения задания 6 — в [`unity-task7/`](unity-task7/README.md):
+XR Interaction Toolkit 2.6.4, адаптированный `webxr-xrit-bridge`, экранный
+XR Ray Interactor, XR Grab Interactable, drag, pinch, подсветка и сброс.
+
+**WebGL задания 7 ещё не собран и не опубликован.** Для сборки в Windows закрыть
+проект Unity, перейти в `unity-task7` и выполнить:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\Build.ps1 -CopyToSite
+```
+
+Нужен Unity 6000.3.7f1 с Web Build Support. Скрипт подготовит сцену и после
+успешной сборки скопирует файлы в `unity-interactive/`. Инструкция по публикации,
+управлению и проверке на телефоне — в README проекта. Проверки JavaScript:
+`node tools/check_task7.mjs`. Компиляция C#, WebGL и мобильный AR в среде подготовки
+не выполнялись. Сборка задания 6 в `unity-viewer/` сохранена.

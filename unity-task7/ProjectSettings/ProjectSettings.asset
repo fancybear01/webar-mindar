@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!129 &1
+PlayerSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 28
+  companyName: WebAR Practice
+  productName: Viewer Space AR
+  defaultScreenWidth: 1920
+  defaultScreenHeight: 1080
+  m_ActiveColorSpace: 1
+  runInBackground: 1
+  stripEngineCode: 1
+  webGLTemplate: PROJECT:WebXRFullView2020
+  webGLCompressionFormat: 2
+  webGLThreadsSupport: 0
+  webGLDecompressionFallback: 0
+  webGLInitialMemorySize: 128
+  webGLMaximumMemorySize: 512
+  webGLMemoryGrowthMode: 2
+  activeInputHandler: 1
+  productGUID: 5eb21321daaa51bdb0e935e5698a933f

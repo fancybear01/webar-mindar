@@ -1,0 +1,9 @@
+unity-task7/[Ll]ibrary/
+unity-task7/[Tt]emp/
+unity-task7/[Oo]bj/
+unity-task7/[Ll]ogs/
+unity-task7/[Uu]ser[Ss]ettings/
+unity-task7/Build/
+unity-task7/*.csproj
+unity-task7/*.sln
+unity-task7/*.log

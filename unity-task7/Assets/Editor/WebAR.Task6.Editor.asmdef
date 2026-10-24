@@ -1,0 +1,17 @@
+{
+  "name": "WebAR.Task6.Editor",
+  "references": [
+    "WebAR.Task6",
+    "WebXR",
+    "WebXR.Editor",
+    "Unity.XR.Management",
+    "Unity.XR.Management.Editor",
+    "Unity.XR.Interaction.Toolkit",
+    "Unity.InputSystem",
+    "WebXR.XRITBridge"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "com.de-panther.webxr": "file:com.de-panther.webxr",
+    "com.unity.xr.management": "4.5.0",
+    "com.unity.modules.imgui": "1.0.0",
+    "com.unity.modules.audio": "1.0.0",
+    "com.unity.modules.jsonserialize": "1.0.0",
+    "com.unity.modules.physics": "1.0.0",
+    "com.unity.modules.xr": "1.0.0",
+    "com.someone-s.webxr-xrit-bridge": "file:com.someone-s.webxr-xrit-bridge",
+    "com.unity.xr.interaction.toolkit": "2.6.4",
+    "com.unity.inputsystem": "1.11.2",
+    "com.unity.ugui": "2.0.0"
+  }
+}
