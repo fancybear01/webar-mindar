@@ -1,0 +1,10 @@
+<linker>
+  <assembly fullname="WebAR.Task6">
+    <type fullname="WebAR.Task7.ScreenRayController" preserve="all" />
+    <type fullname="WebAR.Task7.Task7SceneController" preserve="all" />
+  </assembly>
+  <assembly fullname="WebXR.XRITBridge">
+    <type fullname="WebXR.XRITBridge.WebXRInteractionController" preserve="all" />
+    <type fullname="WebXR.XRITBridge.WebXRBridgeControllerState" preserve="all" />
+  </assembly>
+</linker>

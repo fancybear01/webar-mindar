@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Задание 7 — интерактивный Unity WebAR</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #101827; font: 15px/1.4 system-ui, sans-serif; color: white; }
+    #unity-canvas { width: 100%; height: 100%; display: block; }
+    #task7-overlay { position: fixed; inset: 0; pointer-events: none; background: transparent; }
+    #task7-overlay:before { background: transparent; }
+    #gesture-surface { position: absolute; inset: 0; pointer-events: auto; touch-action: none; }
+    #hud { position: absolute; top: max(12px, env(safe-area-inset-top)); left: 12px; right: 12px; padding: 14px; border-radius: 14px; background: #101827e8; }
+    #hud p { margin: 0 0 8px; }
+    #hud small { color: #c8d3e5; }
+    .controls { pointer-events: auto; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    button, a { min-height: 44px; padding: 10px 13px; border: 0; border-radius: 9px; font: inherit; font-weight: 600; background: #26364e; color: white; text-decoration: none; touch-action: manipulation; }
+    #enterar { background: #b8f36a; color: #122009; }
+    button:disabled { opacity: .45; }
+    #load-status { position: absolute; bottom: max(20px, env(safe-area-inset-bottom)); left: 16px; right: 16px; padding: 12px; background: #101827e8; }
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <section id="task7-overlay">
+    <div id="gesture-surface" aria-label="Область взаимодействия с кубом"></div>
+    <div id="hud">
+      <p><strong>Задание 7 · Drag & scale</strong> <span id="scale">100%</span></p>
+      <p id="interaction-status" role="status">Загружаем интерактивную сцену…</p>
+      <small id="ar-status">Для AR нужен совместимый Android Chrome и HTTPS.</small>
+      <div class="controls">
+        <button id="enterar" disabled>Начать AR</button>
+        <button id="entervr" disabled>VR</button>
+        <button id="smaller" disabled aria-label="Уменьшить объект">−</button>
+        <button id="larger" disabled aria-label="Увеличить объект">+</button>
+        <button id="reset" disabled>Сброс</button>
+        <a href="../index.html">К заданиям</a>
+      </div>
+    </div>
+    <p id="load-status" role="status">Загружаем Unity…</p>
+  </section>
+  <script type="module">
+    import { attachGestures } from './task7-input.mjs';
+    const canvas = document.getElementById('unity-canvas');
+    const loadStatus = document.getElementById('load-status');
+    const interactionStatus = document.getElementById('interaction-status');
+    const arStatus = document.getElementById('ar-status');
+    const arButton = document.getElementById('enterar');
+    const vrButton = document.getElementById('entervr');
+    let instance = null, gestures = null, arSupported = false, vrSupported = false;
+    window.task7UI = { report(status, percent) {
+      interactionStatus.textContent = status;
+      document.getElementById('scale').textContent = percent + '%';
+    }};
+    {{{ WEBXR_POLYFILL_CONFIG }}}
+    document.querySelectorAll('.controls').forEach(controls => {
+      controls.addEventListener('beforexrselect', event => event.preventDefault());
+      controls.addEventListener('pointerdown', () => gestures?.cancel());
+    });
+    document.addEventListener('onARSupportedCheck', event => {
+      arSupported = event.detail.supported;
+      arButton.disabled = !instance || !arSupported;
+      arStatus.textContent = arSupported ? 'AR доступен. Нажмите «Начать AR».' : 'AR недоступен. Можно проверить управление в 3D.';
+    });
+    document.addEventListener('onVRSupportedCheck', event => {
+      vrSupported = event.detail.supported;
+      vrButton.disabled = !instance || !vrSupported;
+    });
+    document.addEventListener('task7-session', event => {
+      gestures?.cancel();
+      arButton.textContent = event.detail.active ? 'Выйти из AR' : 'Начать AR';
+      arStatus.textContent = event.detail.active ? 'AR-сессия · касание и pinch активны' : 'AR завершён. Доступен 3D-просмотр.';
+    });
+    document.addEventListener('task7-session-error', event => {
+      gestures?.cancel();
+      arStatus.textContent = 'Не удалось открыть AR: ' + event.detail.message;
+    });
+    arButton.onclick = () => { gestures?.cancel(); instance?.Module.WebXR.toggleAR(); };
+    vrButton.onclick = () => { gestures?.cancel(); instance?.Module.WebXR.toggleVR(); };
+    document.getElementById('reset').onclick = () => { gestures?.cancel(); instance?.SendMessage('Task7Scene', 'ResetObject'); };
+    document.getElementById('larger').onclick = () => instance?.SendMessage('Task7Scene', 'ScaleUp');
+    document.getElementById('smaller').onclick = () => instance?.SendMessage('Task7Scene', 'ScaleDown');
+    const script = document.createElement('script');
+    script.src = 'Build/{{{ LOADER_FILENAME }}}';
+    script.onerror = () => { loadStatus.textContent = 'Не удалось загрузить Unity. Обновите страницу и проверьте соединение.'; };
+    script.onload = async () => {
+      try {
+        instance = await createUnityInstance(canvas, {
+          dataUrl: 'Build/{{{ DATA_FILENAME }}}',
+          frameworkUrl: 'Build/{{{ FRAMEWORK_FILENAME }}}',
+          codeUrl: 'Build/{{{ CODE_FILENAME }}}',
+          streamingAssetsUrl: 'StreamingAssets',
+          companyName: '{{{ COMPANY_NAME }}}', productName: '{{{ PRODUCT_NAME }}}', productVersion: '{{{ PRODUCT_VERSION }}}'
+        }, progress => { loadStatus.textContent = 'Загружаем Unity: ' + Math.round(progress * 100) + '%'; });
+        window.task7App = instance;
+        gestures = attachGestures(document.getElementById('gesture-surface'), packet => {
+          instance.SendMessage('Task7Input', 'Pointer', JSON.stringify(packet));
+        });
+        loadStatus.hidden = true;
+        arButton.disabled = !arSupported;
+        vrButton.disabled = !vrSupported;
+        ['reset', 'larger', 'smaller'].forEach(id => { document.getElementById(id).disabled = false; });
+      } catch (error) { loadStatus.textContent = 'Ошибка запуска Unity: ' + error; }
+    };
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "com.someone-s.webxr-xrit-bridge",
+  "version": "0.1.2-task7.1",
+  "displayName": "WebXR Export to XR Interaction Toolkit Bridge",
+  "description": "Package to correspond values from De-Panther's unity-webxr-export to InputSystem and XR Interaction Toolkit",
+  "unity": "2021.3",
+  "documentationUrl": "https://github.com/someone-s/webxr-xri-toolkit-bridge",
+  "changelogUrl": "https://github.com/someone-s/webxr-xri-toolkit-bridge",
+  "licensesUrl": "https://github.com/someone-s/webxr-xri-toolkit-bridge/blob/main/LICENSE",
+  "dependencies": {
+    "com.de-panther.webxr": "0.25.0",
+    "com.unity.inputsystem": "1.11.2",
+    "com.unity.xr.interaction.toolkit": "2.6.4"
+  },
+  "keywords": [
+    "xr",
+    "interaction",
+    "webxr"
+  ],
+  "author": {
+    "name": "Someone-S",
+    "url": "https://github.com/someone-s"
+  },
+  "unityRelease": "21f1"
+}

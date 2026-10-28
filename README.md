@@ -8,7 +8,7 @@
 
 Откройте ссылку в Chrome на телефоне и разрешите камеру. Для опубликованного сайта ноутбук, локальный сервер и настройка `chrome://flags` не требуются.
 
-Стартовая страница `index.html` содержит шесть заданий:
+Стартовая страница `index.html` содержит семь заданий:
 
 1. `model-viewer-ar.html` — 3D-пирамида и размещение через AR-просмотрщик.
 2. `mindar-image-tracking.html` — пирамида над изображением `assets/marker.png`.
@@ -16,6 +16,7 @@
 4. `threejs-hit-test.html` — WebXR hit-test и размещение куба на найденной плоскости.
 5. `threejs-controls.html` — управление цветом, поворотом, моделью и PBR-материалом, HDRI-освещение.
 6. `unity-viewer/` — настоящая WebGL-сборка Unity с De-Panther WebXR Export и кубом в viewer-space.
+7. `unity-interactive/` — Unity WebXR с XRI-перетаскиванием, pinch, подсветкой и контроллерными лучами.
 
 ## Задание 5: проверка на телефоне
 
@@ -67,3 +68,29 @@ cloudflared tunnel --url http://localhost:8080
 - Задание 4: после «Начать AR» появляется зелёное кольцо на полу или столе; касание размещает куб. При перемещении телефона куб остаётся на прежнем месте.
 
 Файлы A-Frame, MindAR, Three.js, MediaPipe WASM и модель лица сохранены локально. Камера и WebXR требуют HTTPS либо `localhost`. Настольная проверка подтверждает загрузку страницы и сообщения о совместимости, но не заменяет проверку AR на телефоне.
+
+## Задание 7: интерактивный Unity WebAR
+
+Исходники продолжения задания 6 — в [`unity-task7/`](unity-task7/README.md):
+XR Interaction Toolkit 2.6.4, адаптированный `webxr-xrit-bridge`, экранный
+XR Ray Interactor, XR Grab Interactable, drag, pinch, подсветка и сброс.
+
+Готовая HTTPS-страница: https://fancybear01.github.io/webar-mindar/unity-interactive/.
+Исходный Unity-проект: [скачать ZIP](downloads/unity-task7-source.zip). Размер WebGL — около 33,5 МБ.
+Коснитесь самого куба и тяните одним пальцем; добавьте второй для масштаба.
+Кнопки `−`, `+` и «Сброс» также работают в AR. При захвате куб подсвечивается зелёным.
+
+Для повторной сборки в Windows закрыть проект Unity, перейти в `unity-task7` и выполнить:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\Build.ps1 -CopyToSite
+```
+
+Нужен Unity 6000.3.7f1 с Web Build Support. Скрипт подготовит сцену и после
+успешной сборки скопирует файлы в `unity-interactive/`. Инструкция по публикации,
+управлению и проверке на телефоне — в README проекта. Проверки JavaScript:
+`node tools/check_task7.mjs`. Настоящая WebGL-проверка: `node tools/check_task7_runtime.cjs`
+(нужны Playwright и Chromium). C# скомпилирован, проверены фактические XRI drag,
+pinch, подсветка, отмена и контроллерные пакеты через bridge/Input System.
+Физические контроллеры и мобильная AR-камера ещё требуют проверки на устройстве.
+Сборка задания 6 в `unity-viewer/` сохранена.

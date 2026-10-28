@@ -1,0 +1,11 @@
+{
+  "name": "WebAR.Task6",
+  "references": [
+    "WebXR",
+    "Unity.XR.Management",
+    "Unity.XR.Interaction.Toolkit",
+    "Unity.InputSystem",
+    "WebXR.XRITBridge"
+  ],
+  "autoReferenced": true
+}
