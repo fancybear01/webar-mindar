@@ -93,6 +93,7 @@
           streamingAssetsUrl: 'StreamingAssets',
           companyName: '{{{ COMPANY_NAME }}}', productName: '{{{ PRODUCT_NAME }}}', productVersion: '{{{ PRODUCT_VERSION }}}'
         }, progress => { loadStatus.textContent = 'Загружаем Unity: ' + Math.round(progress * 100) + '%'; });
+        window.task7App = instance;
         gestures = attachGestures(document.getElementById('gesture-surface'), packet => {
           instance.SendMessage('Task7Input', 'Pointer', JSON.stringify(packet));
         });

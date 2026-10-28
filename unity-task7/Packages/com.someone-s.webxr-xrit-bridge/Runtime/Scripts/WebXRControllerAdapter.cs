@@ -22,7 +22,8 @@ namespace WebXR.XRITBridge
         [InputControl(name = "gripPressed", layout = "Button", bit = 1)]
         [FieldOffset(12)] public uint buttons;
         [InputControl(layout = "Axis")][FieldOffset(16)] public float grip;
-        [InputControl(layout = "Button")][FieldOffset(20)] public byte isTracked;
+        // A tracked flag is one bit, not a normalized byte axis (1 / 255).
+        [InputControl(layout = "Button", bit = 0)][FieldOffset(20)] public byte isTracked;
         [InputControl(layout = "Integer")][FieldOffset(24)] public int trackingState;
         [InputControl(layout = "Vector3")][FieldOffset(28)] public Vector3 devicePosition;
         [InputControl(layout = "Quaternion")][FieldOffset(40)] public Quaternion deviceRotation;
@@ -56,7 +57,7 @@ namespace WebXR.XRITBridge
             if (added) InputSystem.QueueStateEvent(this, new WebXRBridgeControllerState());
         }
 
-        private void OnControllerUpdate(WebXRControllerData data)
+        public void OnControllerUpdate(WebXRControllerData data)
         {
             if ((WebXRControllerHand)data.hand != ident || !added) return;
             uint buttons = 0;
@@ -80,6 +81,12 @@ namespace WebXR.XRITBridge
     {
         private WebXRInteractionController left;
         private WebXRInteractionController right;
+
+        public void ApplyControllerPacket(WebXRControllerData data)
+        {
+            left?.OnControllerUpdate(data);
+            right?.OnControllerUpdate(data);
+        }
 
         private void OnEnable()
         {

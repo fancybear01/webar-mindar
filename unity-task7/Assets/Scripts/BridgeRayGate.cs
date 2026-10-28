@@ -13,9 +13,11 @@ namespace WebAR.Task7
         public LineRenderer line;
         public Task7SceneController scene;
         private InputAction scaleAxis;
+        private XRInteractorLineVisual visual;
 
         private void OnEnable()
         {
+            visual = GetComponent<XRInteractorLineVisual>();
             string hand = name.Contains("Left") ? "LeftHand" : "RightHand";
             scaleAxis = new InputAction("Scale", InputActionType.Value,
                 "<WebXRInteractionController>{" + hand + "}/primary2DAxis");
@@ -28,6 +30,9 @@ namespace WebAR.Task7
             ray.allowHover = tracked;
             ray.allowSelect = tracked;
             line.enabled = tracked;
+            // LineVisual updates after this gate and can otherwise re-enable
+            // an invalid red ray after the controller has disconnected.
+            if (visual) visual.enabled = tracked;
             if (tracked && ray.hasSelection)
             {
                 float y = scaleAxis.ReadValue<Vector2>().y;
@@ -37,6 +42,8 @@ namespace WebAR.Task7
 
         private void OnDisable()
         {
+            if (visual) visual.enabled = false;
+            if (line) line.enabled = false;
             scaleAxis?.Disable();
             scaleAxis?.Dispose();
             scaleAxis = null;

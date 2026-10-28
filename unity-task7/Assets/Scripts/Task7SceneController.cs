@@ -2,6 +2,10 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using WebXR;
+using System;
+using UnityEngine.InputSystem;
+using UnityEngine.Scripting;
+using WebXR.XRITBridge;
 
 namespace WebAR.Task7
 {
@@ -20,9 +24,19 @@ namespace WebAR.Task7
         private float desiredScale = InitialScale;
         private string lastStatus;
         private int lastPercent;
+        private float nextProbe;
+        private int selections;
+        [Serializable] private class Probe {
+            public Vector3 position;
+            public float scale;
+            public bool selected, hovered;
+            public string color;
+            public int selections, bridgeDevices;
+        }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         [DllImport("__Internal")] private static extern void Task7Report(string status, int percent);
+        [DllImport("__Internal")] private static extern void Task7State(string json);
 #endif
 
         public Camera ActiveCamera
@@ -40,6 +54,7 @@ namespace WebAR.Task7
         {
             material = target.GetComponent<Renderer>().material;
             material.EnableKeyword("_EMISSION");
+            target.selectEntered.AddListener(_ => selections++);
         }
 
         private void OnEnable()
@@ -81,6 +96,15 @@ namespace WebAR.Task7
             desiredScale = Mathf.Clamp(desiredScale * factor, MinimumScale, MaximumScale);
         }
 
+        // A synthetic packet can exercise the real bridge and XRI pipeline in
+        // automated browser tests. It does not claim a physical-device test.
+        [Preserve]
+        public void BridgeDiagnostic(string json)
+        {
+            var adapter = FindFirstObjectByType<WebXRControllerAdapter>();
+            if (adapter) adapter.ApplyControllerPacket(JsonUtility.FromJson<WebXRControllerData>(json));
+        }
+
         private void LateUpdate()
         {
             Camera camera = ActiveCamera;
@@ -113,6 +137,20 @@ namespace WebAR.Task7
                 : target.isHovered ? "Объект под лучом — нажмите для захвата"
                 : "Коснитесь куба и тяните. Два пальца — масштаб";
             int percent = Mathf.RoundToInt(desiredScale / InitialScale * 100);
+#if UNITY_WEBGL && !UNITY_EDITOR
+            if (Time.unscaledTime >= nextProbe)
+            {
+                nextProbe = Time.unscaledTime + 0.1f;
+                int devices = 0;
+                foreach (var device in InputSystem.devices)
+                    if (device is WebXRInteractionController) devices++;
+                Task7State(JsonUtility.ToJson(new Probe {
+                    position = target.transform.position, scale = desiredScale / InitialScale,
+                    selected = target.isSelected, hovered = target.isHovered,
+                    color = ColorUtility.ToHtmlStringRGB(color), selections = selections, bridgeDevices = devices
+                }));
+            }
+#endif
             if (status == lastStatus && percent == lastPercent) return;
             lastStatus = status;
             lastPercent = percent;

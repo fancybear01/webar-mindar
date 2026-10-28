@@ -7,3 +7,4 @@ unity-task7/Build/
 unity-task7/*.csproj
 unity-task7/*.sln
 unity-task7/*.log
+node_modules/

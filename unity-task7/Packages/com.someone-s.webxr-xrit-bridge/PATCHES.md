@@ -22,4 +22,7 @@ versioned 0.1.2-task7.1; it is a modified package, not an upstream AR support cl
   pointers to XRControllerState and XRRayInteractor instead. It uses the same
   XRInteractionManager and XRGrabInteractable as the bridge-backed controller rays.
 
-Unity compilation, WebGL execution and real-device testing still need to be run.
+The tracked flag uses an explicit bit control, rather than a normalized byte.
+This makes a state value of 1 read as pressed by ActionBasedController.
+Diagnostic packets can be passed through the same adapter for runtime tests;
+these are synthetic input checks, not claims of physical-controller testing.
